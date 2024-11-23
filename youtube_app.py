@@ -5,6 +5,7 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+from googleapiclient.http import MediaFileUpload
 import json
 
 # Constants
@@ -32,75 +33,88 @@ def load_credentials():
 # Upload a video
 def upload_video(file_path, title, description):
     youtube = initialize_youtube()
-    request = youtube.videos().insert(
-        part="snippet,status",
-        body={
-            "snippet": {
-                "title": title,
-                "description": description,
-                "tags": ["example", "CRUD"],
-                "categoryId": "22"
-            },
-            "status": {
-                "privacyStatus": "private"
-            }
-        },
-        media_body=file_path
-    )
+    media = MediaFileUpload(file_path, mimetype='video/mp4', resumable=True)
     try:
+        request = youtube.videos().insert(
+            part="snippet,status",
+            body={
+                "snippet": {
+                    "title": title,
+                    "description": description,
+                    "tags": ["example", "CRUD"],
+                    "categoryId": "22"
+                },
+                "status": {
+                    "privacyStatus": "private"
+                }
+            },
+            media_body=media
+        )
         response = request.execute()
         st.success(f"Video uploaded successfully with ID: {response['id']}")
         st.write(f"View the uploaded video [here](https://www.youtube.com/watch?v={response['id']})")
         webbrowser.open(f"https://www.youtube.com/watch?v={response['id']}")
         return response['id']
     except HttpError as error:
-        st.error(f"Error uploading video: {error}")
+        if error.resp.status == 403:
+            st.error("Error 403: Daily quota limit exceeded. Please try again tomorrow.")
+        else:
+            st.error(f"Error uploading video: {error}")
         return None
 
 # Retrieve video details
 def get_video_details(video_id):
     youtube = initialize_youtube()
-    request = youtube.videos().list(part="snippet,contentDetails,statistics", id=video_id)
     try:
+        request = youtube.videos().list(part="snippet,contentDetails,statistics", id=video_id)
         response = request.execute()
         return response
     except HttpError as error:
-        st.error(f"Error retrieving video details: {error}")
+        if error.resp.status == 403:
+            st.error("Error 403: Daily quota limit exceeded. Please try again tomorrow.")
+        else:
+            st.error(f"Error retrieving video details: {error}")
         return None
 
 # Update video details
 def update_video(video_id, new_title, new_description):
     youtube = initialize_youtube()
-    request = youtube.videos().update(
-        part="snippet",
-        body={
-            "id": video_id,
-            "snippet": {
-                "title": new_title,
-                "description": new_description,
-                "categoryId": "22"
-            }
-        }
-    )
     try:
+        request = youtube.videos().update(
+            part="snippet",
+            body={
+                "id": video_id,
+                "snippet": {
+                    "title": new_title,
+                    "description": new_description,
+                    "categoryId": "22"
+                }
+            }
+        )
         response = request.execute()
         st.success(f"Video with ID {video_id} updated successfully.")
         st.write(f"View the updated video [here](https://www.youtube.com/watch?v={video_id})")
         webbrowser.open(f"https://www.youtube.com/watch?v={video_id}")
         return response
     except HttpError as error:
-        st.error(f"Error updating video: {error}")
+        if error.resp.status == 403:
+            st.error("Error 403: Daily quota limit exceeded. Please try again tomorrow.")
+        else:
+            st.error(f"Error updating video: {error}")
         return None
 
 # Delete a video
 def delete_video(video_id):
     youtube = initialize_youtube()
-    request = youtube.videos().delete(id=video_id)
     try:
+        request = youtube.videos().delete(id=video_id)
         request.execute()
         st.success(f"Video with ID {video_id} deleted successfully.")
     except HttpError as error:
-        st.error(f"Error deleting video: {error}")
+        if error.resp.status == 403:
+            st.error("Error 403: Daily quota limit exceeded. Please try again tomorrow.")
+        else:
+            st.error(f"Error deleting video: {error}")
 
 # Main Streamlit App
 def main():

@@ -8,7 +8,7 @@ import os
 import time
 
 # Define constants for the credentials file and scopes
-CLIENT_SECRET_FILE = 'client_secret.json'
+CLIENT_SECRET_FILE = "/Users/apple/repos/SOCIAL-MEDIA-OPERATIONS/client_secret.json"
 TOKEN_FILE = 'token.json'
 SCOPES = ['https://www.googleapis.com/auth/youtube']
 
@@ -128,7 +128,9 @@ def delete_video(video_id):
 # Main function to demonstrate CRUD operations
 def main():
     # Path to the video file
-    file_path = "video.mp4"  # Replace with the path to your video file
+    file_path = "/Users/apple/repos/SOCIAL-MEDIA-OPERATIONS/video.mp4"
+# Update this path
+ # Replace with the path to your video file
     title = "Sample Upload Video"
     description = "This is a test upload video using the YouTube API"
 
