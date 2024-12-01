@@ -1,11 +1,17 @@
+import os
+from dotenv import load_dotenv
 import requests
 
-# Replace with your actual access token and page ID
-ACCESS_TOKEN = 'EAAHsPMV7w1UBO7JNxgRdhMWqJK9ZAmaKbjYdfnUS3zk4KMGP1AZBmIL7NezqZARN5kHD06gjOhn3j2rSSgXU8hyOssagAYOnVmY17FE101hq0ikbOSiUu29VdE0pzWZBEACn8i402ZBZC5kAeA7ZAYwS6GHn5zR57YLfKbFJ2qgJlZAXPgVpRRe18buo4gvHXCghW5MOl8sy'
-PAGE_ID = '493274720537567'
+# Load environment variables from .env file
+load_dotenv()
+
+# Retrieve the access token and page ID from environment variables
+ACCESS_TOKEN = os.getenv('ACCESS_TOKEN')
+PAGE_ID = os.getenv('PAGE_ID')
 
 # Base URL for Facebook API
-BASE_URL = f"https://graph.facebook.com/v17.0/{493274720537567}"
+BASE_URL = f"https://graph.facebook.com/v17.0/{PAGE_ID}"
+
 
 # Function to create a post with text, image, or video
 def create_post():
