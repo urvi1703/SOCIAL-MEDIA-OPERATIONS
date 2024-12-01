@@ -104,7 +104,7 @@ def delete_post():
         print("Post Deleted Successfully:", response.json())
 
 # Main menu for user interaction
-if __name__ == "__main__":
+def run():
     while True:
         print("\nChoose an operation:")
         print("1. Create a Post")
@@ -128,3 +128,7 @@ if __name__ == "__main__":
             break
         else:
             print("Invalid choice. Please try again.")
+
+# Run the program by calling the run function
+if __name__ == "__main__":
+    run()
