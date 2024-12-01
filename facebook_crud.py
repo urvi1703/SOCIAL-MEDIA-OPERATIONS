@@ -7,9 +7,6 @@ PAGE_ID = '493274720537567'
 # Base URL for Facebook API
 BASE_URL = f"https://graph.facebook.com/v17.0/{PAGE_ID}"
 
-# Base URL for Facebook API
-BASE_URL = f"https://graph.facebook.com/v17.0/{PAGE_ID}"
-
 # Function to create a post with text, image, or video
 def create_post():
     print("Choose the type of post you want to create:")
