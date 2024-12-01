@@ -24,6 +24,10 @@ def create_post():
             'access_token': ACCESS_TOKEN
         }
         response = requests.post(url, params=params)
+        if response.status_code != 200:
+            print("Error:", response.json())
+        else:
+            print("Post Created Successfully:", response.json())
 
     elif choice == "2":
         # Image post
@@ -37,6 +41,10 @@ def create_post():
         with open(image_path, 'rb') as image_file:
             files = {'source': image_file}
             response = requests.post(url, params=params, files=files)
+            if response.status_code != 200:
+                print("Error:", response.json())
+            else:
+                print("Image Post Created Successfully:", response.json())
 
     elif choice == "3":
         # Video post
@@ -50,19 +58,24 @@ def create_post():
         with open(video_path, 'rb') as video_file:
             files = {'source': video_file}
             response = requests.post(url, params=params, files=files)
+            if response.status_code != 200:
+                print("Error:", response.json())
+            else:
+                print("Video Post Created Successfully:", response.json())
 
     else:
         print("Invalid choice. Returning to the main menu.")
         return
-
-    print("Create Response:", response.json())
 
 # Function to read posts
 def read_posts():
     url = f"{BASE_URL}/posts"
     params = {'access_token': ACCESS_TOKEN}
     response = requests.get(url, params=params)
-    print("Read Response:", response.json())
+    if response.status_code != 200:
+        print("Error:", response.json())
+    else:
+        print("Read Posts:", response.json())
 
 # Function to update a post
 def update_post():
@@ -74,7 +87,10 @@ def update_post():
         'access_token': ACCESS_TOKEN
     }
     response = requests.post(url, params=params)
-    print("Update Response:", response.json())
+    if response.status_code != 200:
+        print("Error:", response.json())
+    else:
+        print("Post Updated Successfully:", response.json())
 
 # Function to delete a post
 def delete_post():
@@ -82,7 +98,10 @@ def delete_post():
     url = f"https://graph.facebook.com/{post_id}"
     params = {'access_token': ACCESS_TOKEN}
     response = requests.delete(url, params=params)
-    print("Delete Response:", response.json())
+    if response.status_code != 200:
+        print("Error:", response.json())
+    else:
+        print("Post Deleted Successfully:", response.json())
 
 # Main menu for user interaction
 if __name__ == "__main__":
