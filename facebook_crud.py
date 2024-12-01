@@ -1,17 +1,15 @@
 import os
 from dotenv import load_dotenv
-import requests
 
-# Load environment variables from .env file
-load_dotenv()
+# Load environment variables from fb.env file
+load_dotenv(dotenv_path='fb.env')
 
-# Retrieve the access token and page ID from environment variables
+# Now you can access your environment variables
 ACCESS_TOKEN = os.getenv('ACCESS_TOKEN')
 PAGE_ID = os.getenv('PAGE_ID')
 
 # Base URL for Facebook API
 BASE_URL = f"https://graph.facebook.com/v17.0/{PAGE_ID}"
-
 
 # Function to create a post with text, image, or video
 def create_post():
