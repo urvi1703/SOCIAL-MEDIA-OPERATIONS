@@ -9,12 +9,12 @@ def main():
     
     if app_selection == "Facebook":
         # Import Facebook CRUD operations (make sure to have facebook_crud.py)
-        import facebook_crud
-        facebook_crud.run()  # This calls the run function in facebook_crud.py
+        import facebook_app
+        facebook_app.main()  
     elif app_selection == "YouTube":
         # Import YouTube CRUD operations (your youtube_app.py)
         import youtube_app
-        youtube_app.main()  # This calls the main function in youtube_app.py
+        youtube_app.main() 
 
 if __name__ == "__main__":
     main()
