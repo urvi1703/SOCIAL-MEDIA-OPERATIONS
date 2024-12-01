@@ -1,11 +1,10 @@
 import os
 from dotenv import load_dotenv
-import requests
 
-# Load environment variables from .env file
-load_dotenv()
+# Load environment variables from fb.env file
+load_dotenv(dotenv_path='fb.env')
 
-# Retrieve the access token and page ID from environment variables
+# Now you can access your environment variables
 ACCESS_TOKEN = os.getenv('ACCESS_TOKEN')
 PAGE_ID = os.getenv('PAGE_ID')
 
