@@ -10,7 +10,7 @@ if not ACCESS_TOKEN or not PAGE_ID:
     exit(1)
 
 # Base URL for Facebook API
-BASE_URL = f"https://graph.facebook.com/v17.0/{PAGE_ID}"
+BASE_URL = f"https://graph.facebook.com/v17.0/{493274720537567}"
 
 # Function to create a post with text, image, or video
 def create_post():
