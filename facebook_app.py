@@ -1,149 +1,137 @@
+import streamlit as st
 import requests
 
 # Replace with your actual access token and page ID
-ACCESS_TOKEN = 'EAAHsPMV7w1UBO7JNxgRdhMWqJK9ZAmaKbjYdfnUS3zk4KMGP1AZBmIL7NezqZARN5kHD06gjOhn3j2rSSgXU8hyOssagAYOnVmY17FE101hq0ikbOSiUu29VdE0pzWZBEACn8i402ZBZC5kAeA7ZAYwS6GHn5zR57YLfKbFJ2qgJlZAXPgVpRRe18buo4gvHXCghW5MOl8sy'
-PAGE_ID = '493274720537567'
+ACCESS_TOKEN = 'your_access_token_here'
+PAGE_ID = 'your_page_id_here'
 
-# Check if access token and page ID are loaded correctly
-if not ACCESS_TOKEN or not PAGE_ID:
-    print("Error: ACCESS_TOKEN or PAGE_ID not found.")
-    exit(1)
-
-# Base URL for Facebook API
 BASE_URL = f"https://graph.facebook.com/v17.0/{PAGE_ID}"
 
-# Function to create a post with text, image, or video
+# Streamlit UI for creating a post
 def create_post():
-    print("Choose the type of post you want to create:")
-    print("1. Text Post")
-    print("2. Post with Image")
-    print("3. Post with Video")
-    choice = input("Enter your choice (1/2/3): ")
+    st.write("Choose the type of post you want to create:")
+    post_type = st.selectbox("Post Type", ["Text Post", "Post with Image", "Post with Video"])
 
-    if choice == "1":
-        # Text post
-        message = input("Enter the message you want to post: ")
-        url = f"{BASE_URL}/feed"
-        params = {
-            'message': message,
-            'access_token': ACCESS_TOKEN
-        }
-        try:
-            response = requests.post(url, params=params, timeout=30)
-            response.raise_for_status()
-            print("Post Created Successfully:", response.json())
-        except requests.exceptions.RequestException as e:
-            print(f"Error: {e}")
-
-    elif choice == "2":
-        # Image post
-        image_path = input("Enter the full path of the image file: ")
-        caption = input("Enter a caption for the image: ")
-        url = f"{BASE_URL}/photos"
-        params = {
-            'caption': caption,
-            'access_token': ACCESS_TOKEN
-        }
-        try:
-            with open(image_path, 'rb') as image_file:
-                files = {'source': image_file}
-                response = requests.post(url, params=params, files=files, timeout=30)
-                response.raise_for_status()
-                print("Image Post Created Successfully:", response.json())
-        except requests.exceptions.RequestException as e:
-            print(f"Error: {e}")
-        except FileNotFoundError:
-            print(f"Error: File '{image_path}' not found.")
-
-    elif choice == "3":
-        # Video post
-        video_path = input("Enter the full path of the video file: ")
-        description = input("Enter a description for the video: ")
-        url = f"{BASE_URL}/videos"
-        params = {
-            'description': description,
-            'access_token': ACCESS_TOKEN
-        }
-        try:
-            with open(video_path, 'rb') as video_file:
-                files = {'source': video_file}
-                response = requests.post(url, params=params, files=files, timeout=30)
-                response.raise_for_status()
-                print("Video Post Created Successfully:", response.json())
-        except requests.exceptions.RequestException as e:
-            print(f"Error: {e}")
-        except FileNotFoundError:
-            print(f"Error: File '{video_path}' not found.")
-
+    if post_type == "Text Post":
+        message = st.text_input("Enter the message you want to post:")
+        if st.button("Create Text Post"):
+            if message:
+                url = f"{BASE_URL}/feed"
+                params = {'message': message, 'access_token': ACCESS_TOKEN}
+                try:
+                    response = requests.post(url, params=params, timeout=30)
+                    response.raise_for_status()
+                    st.success("Text Post Created Successfully!")
+                except requests.exceptions.RequestException as e:
+                    st.error(f"Error: {e}")
+    
+    elif post_type == "Post with Image":
+        image_path = st.text_input("Enter the full path of the image file:")
+        caption = st.text_input("Enter a caption for the image:")
+        if st.button("Create Image Post"):
+            if image_path:
+                url = f"{BASE_URL}/photos"
+                params = {'caption': caption, 'access_token': ACCESS_TOKEN}
+                try:
+                    with open(image_path, 'rb') as image_file:
+                        files = {'source': image_file}
+                        response = requests.post(url, params=params, files=files, timeout=30)
+                        response.raise_for_status()
+                        st.success("Image Post Created Successfully!")
+                except requests.exceptions.RequestException as e:
+                    st.error(f"Error: {e}")
+                except FileNotFoundError:
+                    st.error(f"Error: File '{image_path}' not found.")
+    
+    elif post_type == "Post with Video":
+        video_path = st.text_input("Enter the full path of the video file:")
+        description = st.text_input("Enter a description for the video:")
+        if st.button("Create Video Post"):
+            if video_path:
+                url = f"{BASE_URL}/videos"
+                params = {'description': description, 'access_token': ACCESS_TOKEN}
+                try:
+                    with open(video_path, 'rb') as video_file:
+                        files = {'source': video_file}
+                        response = requests.post(url, params=params, files=files, timeout=30)
+                        response.raise_for_status()
+                        st.success("Video Post Created Successfully!")
+                except requests.exceptions.RequestException as e:
+                    st.error(f"Error: {e}")
+                except FileNotFoundError:
+                    st.error(f"Error: File '{video_path}' not found.")
+    
     else:
-        print("Invalid choice. Returning to the main menu.")
-        return
+        st.error("Invalid post type selected.")
 
-# Function to read posts
+# Streamlit UI for reading posts
 def read_posts():
     url = f"{BASE_URL}/posts"
     params = {'access_token': ACCESS_TOKEN}
     try:
         response = requests.get(url, params=params, timeout=30)
         response.raise_for_status()
-        print("Read Posts:", response.json())
+        st.write("Read Posts:")
+        posts = response.json().get('data', [])
+        for post in posts:
+            st.write(post)
     except requests.exceptions.RequestException as e:
-        print(f"Error: {e}")
+        st.error(f"Error: {e}")
 
-# Function to update a post
+# Streamlit UI for updating a post
 def update_post():
-    post_id = input("Enter the Post ID you want to update: ")
-    new_message = input("Enter the new message: ")
-    url = f"https://graph.facebook.com/{post_id}"
-    params = {
-        'message': new_message,
-        'access_token': ACCESS_TOKEN
-    }
-    try:
-        response = requests.post(url, params=params, timeout=30)
-        response.raise_for_status()
-        print("Post Updated Successfully:", response.json())
-    except requests.exceptions.RequestException as e:
-        print(f"Error: {e}")
-
-# Function to delete a post
-def delete_post():
-    post_id = input("Enter the Post ID you want to delete: ")
-    url = f"https://graph.facebook.com/{post_id}"
-    params = {'access_token': ACCESS_TOKEN}
-    try:
-        response = requests.delete(url, params=params, timeout=30)
-        response.raise_for_status()
-        print("Post Deleted Successfully:", response.json())
-    except requests.exceptions.RequestException as e:
-        print(f"Error: {e}")
-
-# Main menu for user interaction
-def main():
-    while True:
-        print("\nChoose an operation:")
-        print("1. Create a Post")
-        print("2. Read Posts")
-        print("3. Update a Post")
-        print("4. Delete a Post")
-        print("5. Exit")
-        
-        choice = input("Enter your choice: ")
-        
-        if choice == "1":
-            create_post()
-        elif choice == "2":
-            read_posts()
-        elif choice == "3":
-            update_post()
-        elif choice == "4":
-            delete_post()
-        elif choice == "5":
-            print("Exiting the program.")
-            break
+    post_id = st.text_input("Enter the Post ID you want to update:")
+    new_message = st.text_input("Enter the new message:")
+    if st.button("Update Post"):
+        if post_id and new_message:
+            url = f"https://graph.facebook.com/{post_id}"
+            params = {
+                'message': new_message,
+                'access_token': ACCESS_TOKEN
+            }
+            try:
+                response = requests.post(url, params=params, timeout=30)
+                response.raise_for_status()
+                st.success("Post Updated Successfully!")
+            except requests.exceptions.RequestException as e:
+                st.error(f"Error: {e}")
         else:
-            print("Invalid choice. Please try again.")
+            st.error("Post ID and new message are required.")
 
-# Run the main menu function
+# Streamlit UI for deleting a post
+def delete_post():
+    post_id = st.text_input("Enter the Post ID you want to delete:")
+    if st.button("Delete Post"):
+        if post_id:
+            url = f"https://graph.facebook.com/{post_id}"
+            params = {'access_token': ACCESS_TOKEN}
+            try:
+                response = requests.delete(url, params=params, timeout=30)
+                response.raise_for_status()
+                st.success("Post Deleted Successfully!")
+            except requests.exceptions.RequestException as e:
+                st.error(f"Error: {e}")
+        else:
+            st.error("Post ID is required.")
+
+# Main Streamlit UI
+def main():
+    st.title("Facebook Post Management App")
+    
+    menu = ["Create a Post", "Read Posts", "Update a Post", "Delete a Post", "Exit"]
+    choice = st.sidebar.selectbox("Choose an operation", menu)
+    
+    if choice == "Create a Post":
+        create_post()
+    elif choice == "Read Posts":
+        read_posts()
+    elif choice == "Update a Post":
+        update_post()
+    elif choice == "Delete a Post":
+        delete_post()
+    elif choice == "Exit":
+        st.write("Exiting the program.")
+
+# Run the app
 if __name__ == "__main__":
     main()
