@@ -2,8 +2,8 @@ import streamlit as st
 import requests
 
 # Replace with your actual access token and page ID
-ACCESS_TOKEN = 'your_access_token_here'
-PAGE_ID = 'your_page_id_here'
+ACCESS_TOKEN = 'EAAHsPMV7w1UBO7JNxgRdhMWqJK9ZAmaKbjYdfnUS3zk4KMGP1AZBmIL7NezqZARN5kHD06gjOhn3j2rSSgXU8hyOssagAYOnVmY17FE101hq0ikbOSiUu29VdE0pzWZBEACn8i402ZBZC5kAeA7ZAYwS6GHn5zR57YLfKbFJ2qgJlZAXPgVpRRe18buo4gvHXCghW5MOl8sy'
+PAGE_ID = '493274720537567'
 
 BASE_URL = f"https://graph.facebook.com/v17.0/{PAGE_ID}"
 
