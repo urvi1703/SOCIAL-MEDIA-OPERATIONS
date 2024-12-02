@@ -7,8 +7,6 @@ Original file is located at
     https://colab.research.google.com/drive/1k_10DYYyELQNTT9-w8jFuisx-SiAhBri
 """
 
-!pip install requests
-
 import requests
 
 # Replace with your Discord Webhook URL
@@ -97,7 +95,6 @@ for i in range(5):  # Send 5 messages
 
     time.sleep(10)  # Wait 10 seconds before sending the next message
 
-!pip install streamlit
 
 import streamlit as st
 
