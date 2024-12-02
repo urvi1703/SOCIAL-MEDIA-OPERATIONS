@@ -6,12 +6,12 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 import json
 import os
+from google.auth.transport.requests import Request  # Correct import for token refresh
 
 # Define constants for the credentials file and scopes
 CLIENT_SECRET_FILE = "client_secret.json"  # Path to your credentials file
 TOKEN_FILE = "token.json"  # Path to store token
 SCOPES = ["https://www.googleapis.com/auth/youtube"]
-
 
 # Initialize YouTube API client
 def initialize_youtube():
@@ -19,7 +19,6 @@ def initialize_youtube():
     youtube = build("youtube", "v3", credentials=creds)
     print("YouTube API client initialized.")
     return youtube
-
 
 # Load or get credentials with OAuth
 def load_credentials():
@@ -36,23 +35,25 @@ def load_credentials():
         if creds and creds.expired and creds.refresh_token:
             print("Token expired. Refreshing...")
             try:
-                creds.refresh(requests.Request())
+                creds.refresh(Request())
                 print("Token refreshed successfully.")
             except Exception as e:
                 print(f"Error refreshing token: {e}")
                 creds = None
-        else:
-            print("No valid token found or unable to refresh. Starting OAuth flow...")
+        if not creds or not creds.valid:  # Start OAuth if refresh fails
+            print("No valid token found. Starting OAuth flow...")
+            if not os.path.exists(CLIENT_SECRET_FILE):
+                raise FileNotFoundError(f"Client secret file not found: {CLIENT_SECRET_FILE}")
             flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRET_FILE, SCOPES)
             creds = flow.run_local_server(port=0)
             print("New credentials obtained.")
 
-        # Save the credentials to the token file
-        with open(TOKEN_FILE, "w") as token:
-            token.write(creds.to_json())
-        print("Credentials saved to token file.")
+        # Save new credentials to token file
+        if creds:
+            with open(TOKEN_FILE, "w") as token:
+                token.write(creds.to_json())
+            print("Credentials saved to token file.")
     return creds
-
 
 # Create (Upload) a video with YouTube API
 def upload_video(file_path, title, description):
@@ -82,7 +83,6 @@ def upload_video(file_path, title, description):
         print(f"Error uploading video: {error}")
         return None
 
-
 # Read (Retrieve) video details
 def get_video_details(video_id):
     youtube = initialize_youtube()
@@ -96,7 +96,6 @@ def get_video_details(video_id):
     except HttpError as error:
         print(f"Error getting video details: {error}")
         return None
-
 
 # Update video details
 def update_video(video_id, new_title, new_description):
@@ -122,7 +121,6 @@ def update_video(video_id, new_title, new_description):
         print(f"Error updating video: {error}")
         return None
 
-
 # Delete a video
 def delete_video(video_id):
     youtube = initialize_youtube()
@@ -133,7 +131,6 @@ def delete_video(video_id):
         print(f"Video with ID {video_id} deleted successfully.")
     except HttpError as error:
         print(f"Error deleting video: {error}")
-
 
 # Main function to demonstrate CRUD operations
 def main():
@@ -154,7 +151,6 @@ def main():
 
         print("\n4. Deleting the video...")
         delete_video(video_id)
-
 
 if __name__ == "__main__":
     main()
