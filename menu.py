@@ -6,7 +6,7 @@ def main():
     st.title("Social Media CRUD Operations")
     
     # Add a selectbox for platform selection
-    app_selection = st.selectbox("Select a platform", ["Facebook", "YouTube", "Reddit"])
+    app_selection = st.selectbox("Select a platform", ["Facebook", "YouTube", "Reddit", "Discord"])
     
     if app_selection == "Facebook":
         # Facebook operations - import and call the appropriate function from facebook_app.py
@@ -24,7 +24,13 @@ def main():
         # Reddit operations - import and call the appropriate function from reddit_app.py
         import app
         st.subheader("Reddit Operations")
-        app.main()  # Ensure the main function in reddit_app is properly defined
+        app.main()  # Ensure the main function in app.py is properly defined
+    
+    elif app_selection == "Discord":
+        # Discord operations - import and call the appropriate function from discord_app.py
+        import discord_app
+        st.subheader("Discord Operations")
+        discord_app.main()  # Ensure the main function in discord_app is properly defined
 
 # Run the main function when the script is executed
 if __name__ == "__main__":
