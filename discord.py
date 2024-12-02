@@ -133,3 +133,6 @@ def main():
         if st.button("Delete Message"):
             # Call Discord API to delete the message
             st.success(f"Message {message_id} deleted successfully!")
+
+if __name__ == "__main__":
+    main()
