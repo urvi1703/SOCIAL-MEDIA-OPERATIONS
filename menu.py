@@ -22,9 +22,9 @@ def main():
     
     elif app_selection == "Reddit":
         # Reddit operations - import and call the appropriate function from reddit_app.py
-        import reddit_app
+        import app
         st.subheader("Reddit Operations")
-        reddit_app.main()  # Ensure the main function in reddit_app is properly defined
+        app.main()  # Ensure the main function in reddit_app is properly defined
 
 # Run the main function when the script is executed
 if __name__ == "__main__":
