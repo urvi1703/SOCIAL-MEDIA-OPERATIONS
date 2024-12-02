@@ -26,40 +26,36 @@ def create_post():
                     st.error(f"Error: {e}")
     
     elif post_type == "Post with Image":
-        image_path = st.text_input("Enter the full path of the image file:")
+        image_file = st.file_uploader("Choose an image", type=["jpg", "jpeg", "png", "gif"])
         caption = st.text_input("Enter a caption for the image:")
         if st.button("Create Image Post"):
-            if image_path:
+            if image_file:
                 url = f"{BASE_URL}/photos"
                 params = {'caption': caption, 'access_token': ACCESS_TOKEN}
                 try:
-                    with open(image_path, 'rb') as image_file:
-                        files = {'source': image_file}
-                        response = requests.post(url, params=params, files=files, timeout=30)
-                        response.raise_for_status()
-                        st.success("Image Post Created Successfully!")
+                    # Upload image to Facebook
+                    files = {'source': image_file}
+                    response = requests.post(url, params=params, files=files, timeout=30)
+                    response.raise_for_status()
+                    st.success("Image Post Created Successfully!")
                 except requests.exceptions.RequestException as e:
                     st.error(f"Error: {e}")
-                except FileNotFoundError:
-                    st.error(f"Error: File '{image_path}' not found.")
     
     elif post_type == "Post with Video":
-        video_path = st.text_input("Enter the full path of the video file:")
+        video_file = st.file_uploader("Choose a video", type=["mp4", "mov", "avi", "mkv"])
         description = st.text_input("Enter a description for the video:")
         if st.button("Create Video Post"):
-            if video_path:
+            if video_file:
                 url = f"{BASE_URL}/videos"
                 params = {'description': description, 'access_token': ACCESS_TOKEN}
                 try:
-                    with open(video_path, 'rb') as video_file:
-                        files = {'source': video_file}
-                        response = requests.post(url, params=params, files=files, timeout=30)
-                        response.raise_for_status()
-                        st.success("Video Post Created Successfully!")
+                    # Upload video to Facebook
+                    files = {'source': video_file}
+                    response = requests.post(url, params=params, files=files, timeout=30)
+                    response.raise_for_status()
+                    st.success("Video Post Created Successfully!")
                 except requests.exceptions.RequestException as e:
                     st.error(f"Error: {e}")
-                except FileNotFoundError:
-                    st.error(f"Error: File '{video_path}' not found.")
     
     else:
         st.error("Invalid post type selected.")
