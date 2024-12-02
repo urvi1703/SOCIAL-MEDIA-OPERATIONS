@@ -28,9 +28,9 @@ def main():
     
     elif app_selection == "Discord":
         # Discord operations - import and call the appropriate function from discord_app.py
-        import discord
+        import discord_app
         st.subheader("Discord Operations")
-        discord.main()  # Ensure the main function in discord_app is properly defined
+        discord_app.main()  # Ensure the main function in discord_app is properly defined
 
 # Run the main function when the script is executed
 if __name__ == "__main__":
