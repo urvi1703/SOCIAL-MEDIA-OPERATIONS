@@ -1,18 +1,34 @@
+import os
 import requests
 
 # Access token and Instagram User ID (You need to replace these with your values)
 ACCESS_TOKEN = "EAAYUYyDfveEBO12KOhmt8V75b30i8KfZBMy5N9mFnuvRYHMNFCcTd8QUr6ixtQqdNswOElXo8QhHXkuL5PbiWN2EBZAPkCgLfM02ckV8j7c70ZCyNUXAL40XXgZAYiQdek1KvGP5xbsHYNLIZAHOiwQ0yvs8HrGgouPT3ORBU7NxnhQUuZBYI6uUdU6sHy41fH"
 IG_USER_ID = "493274720537567"
 
-# Create Post (Upload image with caption)
-def create_post(image_url, caption):
-    url = f"https://graph.facebook.com/v17.0/{IG_USER_ID}/media"
-    payload = {
-        "image_url": image_url,
-        "caption": caption,
-        "access_token": ACCESS_TOKEN
-    }
-    response = requests.post(url, data=payload)
+# Create Post (Upload image/video with caption)
+def create_post(file_path_or_url, caption, media_type="image"):
+    """
+    Create an Instagram post with either an uploaded file or a URL.
+    """
+    if os.path.isfile(file_path_or_url):  # Check if it's a file path
+        upload_url = f"https://graph.facebook.com/v17.0/{IG_USER_ID}/media"
+        with open(file_path_or_url, "rb") as media_file:
+            files = {"file": media_file}
+            payload = {
+                "caption": caption,
+                "media_type": media_type,
+                "access_token": ACCESS_TOKEN,
+            }
+            response = requests.post(upload_url, files=files, data=payload)
+    else:  # Assume it's a URL
+        upload_url = f"https://graph.facebook.com/v17.0/{IG_USER_ID}/media"
+        payload = {
+            "image_url" if media_type == "image" else "video_url": file_path_or_url,
+            "caption": caption,
+            "access_token": ACCESS_TOKEN,
+        }
+        response = requests.post(upload_url, data=payload)
+
     if response.status_code == 200:
         media_id = response.json()["id"]
         publish_url = f"https://graph.facebook.com/v17.0/{IG_USER_ID}/media_publish"
@@ -30,7 +46,7 @@ def read_posts():
     url = f"https://graph.facebook.com/v17.0/{IG_USER_ID}/media"
     params = {
         "fields": "id,caption,media_type,media_url,timestamp",
-        "access_token": ACCESS_TOKEN
+        "access_token": ACCESS_TOKEN,
     }
     response = requests.get(url, params=params)
     if response.status_code == 200:
@@ -93,7 +109,7 @@ def view_profile_status():
     url = f"https://graph.facebook.com/v17.0/{IG_USER_ID}"
     params = {
         "fields": "id,username,name,profile_picture_url,biography,website",
-        "access_token": ACCESS_TOKEN
+        "access_token": ACCESS_TOKEN,
     }
     response = requests.get(url, params=params)
     if response.status_code == 200:
@@ -106,7 +122,7 @@ def change_profile_picture(image_url):
     url = f"https://graph.facebook.com/v17.0/{IG_USER_ID}"
     payload = {
         "profile_picture_url": image_url,
-        "access_token": ACCESS_TOKEN
+        "access_token": ACCESS_TOKEN,
     }
     response = requests.post(url, data=payload)
     if response.status_code == 200:
@@ -134,9 +150,10 @@ def main():
         choice = input("Enter your choice: ")
 
         if choice == "1":
-            image_url = input("Enter image URL: ")
+            file_path_or_url = input("Enter file path or URL: ")
+            media_type = input("Enter media type ('image' or 'video'): ").strip().lower()
             caption = input("Enter caption: ")
-            print(create_post(image_url, caption))
+            print(create_post(file_path_or_url, caption, media_type))
 
         elif choice == "2":
             posts = read_posts()
