@@ -31,6 +31,12 @@ def main():
         import discord_app
         st.subheader("Discord Operations")
         discord_app.main()  # Ensure the main function in discord_app is properly defined
+        
+    elif app_selection == "Instagram":
+        import instagram_app
+        st.subheader("Instagram Operations")
+        instagram_app.main()
+
 
 # Run the main function when the script is executed
 if __name__ == "__main__":
