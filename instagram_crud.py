@@ -2,7 +2,7 @@ import os
 import requests
 
 # Access token and Instagram User ID (Replace with your values)
-ACCESS_TOKEN = "EAAYUYyDfveEBO12KOhmt8V75b30i8KfZBMy5N9mFnuvRYHMNFCcTd8QUr6ixtQqdNswOElXo8QhHXkuL5PbiWN2EBZAPkCgLfM02ckV8j7c70ZCyNUXAL40XXgZAYiQdek1KvGP5xbsHYNLIZAHOiwQ0yvs8HrGgouPT3ORBU7NxnhQUuZBYI6uUdU6sHy41fH"
+ACCESS_TOKEN = "EAAYUYyDfveEBO5gFpViUUpVQSMD0YXjktZCOWmAJWSlgBNZANRiN1CbLhQYpWZBqbihBh7yLy4k8NXAIDPMdWcSrDpry48bU4VnEvwRELtzlgyhfdqiMHcaM09d40CPGuMEluOoB1m34lD1tHVKhtkVfZA1KP1jOhZAFrHFZBuw3oAU5OUqqmtpIyx6qnHRJZCG"
 IG_USER_ID = "17841471294584311"
 
 def create_post(media_url, caption, media_type="image"):
