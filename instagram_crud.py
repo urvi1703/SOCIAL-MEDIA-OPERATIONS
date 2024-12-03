@@ -1,48 +1,50 @@
 import os
 import requests
 
-# Access token and Instagram User ID (You need to replace these with your values)
+# Access token and Instagram User ID (Replace with your values)
 ACCESS_TOKEN = "EAAYUYyDfveEBO12KOhmt8V75b30i8KfZBMy5N9mFnuvRYHMNFCcTd8QUr6ixtQqdNswOElXo8QhHXkuL5PbiWN2EBZAPkCgLfM02ckV8j7c70ZCyNUXAL40XXgZAYiQdek1KvGP5xbsHYNLIZAHOiwQ0yvs8HrGgouPT3ORBU7NxnhQUuZBYI6uUdU6sHy41fH"
 IG_USER_ID = "17841471294584311"
 
-# Create Post (Upload image/video with caption)
-def create_post(file_path_or_url, caption, media_type="image"):
+def create_post(media_url, caption, media_type="image"):
     """
-    Create an Instagram post with either an uploaded file or a URL.
+    Create an Instagram post using a media URL and caption.
     """
-    if os.path.isfile(file_path_or_url):  # Check if it's a file path
-        upload_url = f"https://graph.facebook.com/v17.0/{IG_USER_ID}/media"
-        with open(file_path_or_url, "rb") as media_file:
-            files = {"file": media_file}
-            payload = {
-                "caption": caption,
-                "media_type": media_type,
-                "access_token": ACCESS_TOKEN,
-            }
-            response = requests.post(upload_url, files=files, data=payload)
-    else:  # Assume it's a URL
-        upload_url = f"https://graph.facebook.com/v17.0/{IG_USER_ID}/media"
-        payload = {
-            "image_url" if media_type == "image" else "video_url": file_path_or_url,
-            "caption": caption,
-            "access_token": ACCESS_TOKEN,
-        }
-        response = requests.post(upload_url, data=payload)
+    if media_type not in ["image", "video"]:
+        return "Invalid media type. Use 'image' or 'video'."
 
-    if response.status_code == 200:
-        media_id = response.json()["id"]
-        publish_url = f"https://graph.facebook.com/v17.0/{IG_USER_ID}/media_publish"
-        publish_payload = {"creation_id": media_id, "access_token": ACCESS_TOKEN}
-        publish_response = requests.post(publish_url, data=publish_payload)
-        if publish_response.status_code == 200:
-            return "Post created successfully!"
-        else:
-            return f"Error publishing post: {publish_response.text}"
+    # Step 1: Create Media Container
+    media_endpoint = f"https://graph.facebook.com/v17.0/{IG_USER_ID}/media"
+    params = {
+        "caption": caption,
+        "access_token": ACCESS_TOKEN,
+    }
+    if media_type == "image":
+        params["image_url"] = media_url
+    elif media_type == "video":
+        params["video_url"] = media_url
+
+    response = requests.post(media_endpoint, data=params)
+    if response.status_code != 200:
+        return f"Error creating media container: {response.json().get('error', {}).get('message')}"
+
+    creation_id = response.json().get("id")
+
+    # Step 2: Publish Media
+    publish_endpoint = f"https://graph.facebook.com/v17.0/{IG_USER_ID}/media_publish"
+    publish_params = {
+        "creation_id": creation_id,
+        "access_token": ACCESS_TOKEN,
+    }
+    publish_response = requests.post(publish_endpoint, data=publish_params)
+    if publish_response.status_code == 200:
+        return "Post created successfully!"
     else:
-        return f"Error uploading media: {response.text}"
+        return f"Error publishing post: {publish_response.json().get('error', {}).get('message')}"
 
-# Read Posts (Fetch all posts)
 def read_posts():
+    """
+    Fetch all Instagram posts for the user.
+    """
     url = f"https://graph.facebook.com/v17.0/{IG_USER_ID}/media"
     params = {
         "fields": "id,caption,media_type,media_url,timestamp",
@@ -52,60 +54,78 @@ def read_posts():
     if response.status_code == 200:
         return response.json().get("data", [])
     else:
-        return f"Error fetching posts: {response.text}"
+        return f"Error fetching posts: {response.json().get('error', {}).get('message')}"
 
-# Delete Post (Delete a post using post ID)
 def delete_post(post_id):
+    """
+    Delete a specific post using its ID.
+    """
     url = f"https://graph.facebook.com/v17.0/{post_id}"
     params = {"access_token": ACCESS_TOKEN}
     response = requests.delete(url, params=params)
     if response.status_code == 200:
         return "Post deleted successfully!"
     else:
-        return f"Error deleting post: {response.text}"
+        return f"Error deleting post: {response.json().get('error', {}).get('message')}"
 
-# Like a Post (Like a post using post ID)
 def like_post(post_id):
+    """
+    Like a specific post using its ID.
+    """
     url = f"https://graph.facebook.com/v17.0/{post_id}/likes"
     params = {"access_token": ACCESS_TOKEN}
-    response = requests.post(url, params=params)
+    response = requests.post(url, data=params)
     if response.status_code == 200:
         return "Post liked successfully!"
     else:
-        return f"Error liking post: {response.text}"
+        return f"Error liking post: {response.json().get('error', {}).get('message')}"
 
-# Comment on a Post (Comment on a post using post ID)
-def comment_on_post(post_id, message):
+def comment_on_post(post_id, comment):
+    """
+    Add a comment to a specific post using its ID.
+    """
     url = f"https://graph.facebook.com/v17.0/{post_id}/comments"
-    params = {"message": message, "access_token": ACCESS_TOKEN}
-    response = requests.post(url, params=params)
+    params = {
+        "message": comment,
+        "access_token": ACCESS_TOKEN,
+    }
+    response = requests.post(url, data=params)
     if response.status_code == 200:
         return "Comment added successfully!"
     else:
-        return f"Error adding comment: {response.text}"
+        return f"Error adding comment: {response.json().get('error', {}).get('message')}"
 
-# Follow a User (Follow a user using their ID)
 def follow_user(user_id):
+    """
+    Follow a user using their ID.
+    """
     url = f"https://graph.facebook.com/v17.0/{IG_USER_ID}/following"
-    params = {"user_id": user_id, "access_token": ACCESS_TOKEN}
-    response = requests.post(url, params=params)
+    params = {
+        "user_id": user_id,
+        "access_token": ACCESS_TOKEN,
+    }
+    response = requests.post(url, data=params)
     if response.status_code == 200:
         return "User followed successfully!"
     else:
-        return f"Error following user: {response.text}"
+        return f"Error following user: {response.json().get('error', {}).get('message')}"
 
-# Unfollow a User (Unfollow a user using their ID)
 def unfollow_user(user_id):
+    """
+    Unfollow a user using their ID.
+    """
     url = f"https://graph.facebook.com/v17.0/{IG_USER_ID}/following/{user_id}"
     params = {"access_token": ACCESS_TOKEN}
     response = requests.delete(url, params=params)
     if response.status_code == 200:
         return "User unfollowed successfully!"
     else:
-        return f"Error unfollowing user: {response.text}"
+        return f"Error unfollowing user: {response.json().get('error', {}).get('message')}"
 
-# View Profile Status (View your Instagram profile information)
 def view_profile_status():
+    """
+    View Instagram profile information.
+    """
     url = f"https://graph.facebook.com/v17.0/{IG_USER_ID}"
     params = {
         "fields": "id,username,name,profile_picture_url,biography,website",
@@ -115,10 +135,12 @@ def view_profile_status():
     if response.status_code == 200:
         return response.json()
     else:
-        return f"Error fetching profile info: {response.text}"
+        return f"Error fetching profile info: {response.json().get('error', {}).get('message')}"
 
-# Change Profile Picture (Change DP)
 def change_profile_picture(image_url):
+    """
+    Change Instagram profile picture.
+    """
     url = f"https://graph.facebook.com/v17.0/{IG_USER_ID}"
     payload = {
         "profile_picture_url": image_url,
@@ -128,12 +150,13 @@ def change_profile_picture(image_url):
     if response.status_code == 200:
         return "Profile picture changed successfully!"
     else:
-        return f"Error changing profile picture: {response.text}"
+        return f"Error changing profile picture: {response.json().get('error', {}).get('message')}"
 
-# Main function for CRUD operations
 def main():
+    """
+    Command-line interface for Instagram CRUD operations.
+    """
     print("Instagram CRUD Operations")
-
     while True:
         print("\nSelect an operation:")
         print("1. Create Post")
@@ -150,10 +173,10 @@ def main():
         choice = input("Enter your choice: ")
 
         if choice == "1":
-            file_path_or_url = input("Enter file path or URL: ")
+            media_url = input("Enter media URL: ")
             media_type = input("Enter media type ('image' or 'video'): ").strip().lower()
             caption = input("Enter caption: ")
-            print(create_post(file_path_or_url, caption, media_type))
+            print(create_post(media_url, caption, media_type))
 
         elif choice == "2":
             posts = read_posts()
@@ -192,10 +215,10 @@ def main():
             profile_info = view_profile_status()
             if isinstance(profile_info, dict):
                 print(f"Username: {profile_info['username']}")
-                print(f"Name: {profile_info['name']}")
-                print(f"Biography: {profile_info.get('biography', 'No bio')}")
-                print(f"Website: {profile_info.get('website', 'No website')}")
-                print(f"Profile Picture URL: {profile_info['profile_picture_url']}")
+                print(f"Name: {profile_info.get('name', 'N/A')}")
+                print(f"Bio: {profile_info.get('biography', 'N/A')}")
+                print(f"Website: {profile_info.get('website', 'N/A')}")
+                print(f"Profile Picture: {profile_info.get('profile_picture_url', 'N/A')}")
             else:
                 print(profile_info)
 
@@ -210,6 +233,5 @@ def main():
         else:
             print("Invalid choice. Please try again.")
 
-# Run the main function when the script is executed
 if __name__ == "__main__":
     main()
