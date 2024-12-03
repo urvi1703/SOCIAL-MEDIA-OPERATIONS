@@ -3,7 +3,7 @@ import requests
 
 # Access token and Instagram User ID (You need to replace these with your values)
 ACCESS_TOKEN = "EAAYUYyDfveEBO12KOhmt8V75b30i8KfZBMy5N9mFnuvRYHMNFCcTd8QUr6ixtQqdNswOElXo8QhHXkuL5PbiWN2EBZAPkCgLfM02ckV8j7c70ZCyNUXAL40XXgZAYiQdek1KvGP5xbsHYNLIZAHOiwQ0yvs8HrGgouPT3ORBU7NxnhQUuZBYI6uUdU6sHy41fH"
-IG_USER_ID = "493274720537567"
+IG_USER_ID = "17841471294584311"
 
 # Create Post (Upload image/video with caption)
 def create_post(file_path_or_url, caption, media_type="image"):
