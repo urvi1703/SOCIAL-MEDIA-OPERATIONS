@@ -3,7 +3,7 @@ import requests
 
 # Replace with your actual access token and Instagram User ID
 ACCESS_TOKEN = 'EAAYUYyDfveEBO12KOhmt8V75b30i8KfZBMy5N9mFnuvRYHMNFCcTd8QUr6ixtQqdNswOElXo8QhHXkuL5PbiWN2EBZAPkCgLfM02ckV8j7c70ZCyNUXAL40XXgZAYiQdek1KvGP5xbsHYNLIZAHOiwQ0yvs8HrGgouPT3ORBU7NxnhQUuZBYI6uUdU6sHy41fH'
-IG_USER_ID = '493274720537567'
+IG_USER_ID = '17841471294584311'
 
 BASE_URL = f"https://graph.facebook.com/v17.0/{IG_USER_ID}"
 
