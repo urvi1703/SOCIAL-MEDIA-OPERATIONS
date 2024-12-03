@@ -6,7 +6,7 @@ def main():
     st.title("Social Media CRUD Operations")
     
     # Add a selectbox for platform selection
-    app_selection = st.selectbox("Select a platform", ["Facebook", "YouTube", "Reddit", "Discord"])
+    app_selection = st.selectbox("Select a platform", ["Facebook", "YouTube", "Reddit", "Discord","Instagram"])
     
     if app_selection == "Facebook":
         # Facebook operations - import and call the appropriate function from facebook_app.py
