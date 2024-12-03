@@ -46,14 +46,32 @@ def create_post():
         description = st.text_input("Enter a description for the video:")
         if st.button("Create Video Post"):
             if video_file:
-                url = f"{BASE_URL}/videos"
-                params = {'description': description, 'access_token': ACCESS_TOKEN}
+                # Step 1: Upload the video
+                media_url = f"https://graph-video.facebook.com/v17.0/{IG_USER_ID}/media"
+                params = {
+                    'access_token': ACCESS_TOKEN,
+                    'media_type': 'VIDEO',
+                    'caption': description
+                }
+                files = {'video': video_file}
                 try:
-                    # Upload video to Instagram
-                    files = {'source': video_file}
-                    response = requests.post(url, params=params, files=files, timeout=30)
-                    response.raise_for_status()
-                    st.success("Video Post Created Successfully!")
+                    upload_response = requests.post(media_url, params=params, files=files, timeout=30)
+                    upload_response.raise_for_status()
+
+                    # Step 2: Get media ID from upload response
+                    media_id = upload_response.json().get('id')
+                    if media_id:
+                        # Step 3: Publish the video
+                        publish_url = f"https://graph.facebook.com/v17.0/{IG_USER_ID}/media_publish"
+                        publish_params = {
+                            'access_token': ACCESS_TOKEN,
+                            'creation_id': media_id
+                        }
+                        publish_response = requests.post(publish_url, params=publish_params, timeout=30)
+                        publish_response.raise_for_status()
+                        st.success("Video Post Created Successfully!")
+                    else:
+                        st.error("Failed to upload the video.")
                 except requests.exceptions.RequestException as e:
                     st.error(f"Error: {e}")
     
@@ -201,9 +219,8 @@ def main():
         view_profile_status()
     elif choice == "Change Profile Picture":
         change_profile_picture()
-    elif choice == "Exit":
-        st.write("Exiting the program.")
+    else:
+        st.write("Exiting the app...")
 
-# Run the app
 if __name__ == "__main__":
     main()
