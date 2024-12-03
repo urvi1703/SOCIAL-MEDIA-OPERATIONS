@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 
 # Replace with your actual access token and Instagram User ID
-ACCESS_TOKEN = 'EAAYUYyDfveEBO5gFpViUUpVQSMD0YXjktZCOWmAJWSlgBNZANRiN1CbLhQYpWZBqbihBh7yLy4k8NXAIDPMdWcSrDpry48bU4VnEvwRELtzlgyhfdqiMHcaM09d40CPGuMEluOoB1m34lD1tHVKhtkVfZA1KP1jOhZAFrHFZBuw3oAU5OUqqmtpIyx6qnHRJZCG'
+ACCESS_TOKEN = 'EAAYUYyDfveEBOyr24SizpZAympdflPU6lxFQidiZBFMJHtMmmN3IWDA40Y7sF1PbZB70MuIISPOPrTPHIjjZAn0MpTNOtlyZB1aFR4aTd8FyKO8nm4cZBGPg4Gcsem2aXTftgmNTEb7vAAWC4trjWIyDDK3yBcEXxlDa7ZCSBrtZBxXPIZAHqnSZBMuERuqVZAyZB6fF'
 IG_USER_ID = '17841471294584311'
 
 BASE_URL = f"https://graph.facebook.com/v17.0/{IG_USER_ID}"
