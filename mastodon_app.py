@@ -2,6 +2,7 @@ import os
 import streamlit as st
 from mastodon import Mastodon
 from PIL import Image
+import mimetypes
 
 # Mastodon API credentials
 INSTANCE_URL = "https://mastodon.social"  # Replace with your Mastodon instance URL
@@ -18,11 +19,21 @@ mastodon = Mastodon(
 def create_toot(content, media=None):
     """Create a new toot (post)."""
     if media:
+        # Determine the MIME type of the media file
+        mime_type, _ = mimetypes.guess_type(media.name)
+        
+        if not mime_type:
+            raise ValueError("Unable to determine MIME type of the media file.")
+        
         # Upload media (image/video)
-        media_id = mastodon.media_post(media, mime_type="image/jpeg" if media.filename.endswith('.jpg') else "video/mp4")
+        media_id = mastodon.media_post(media, mime_type=mime_type)
+        
+        # Post the toot with the media
         toot = mastodon.status_post(content, media_ids=[media_id])
     else:
+        # Post the toot without media
         toot = mastodon.status_post(content)
+    
     return toot
 
 def read_toots():
