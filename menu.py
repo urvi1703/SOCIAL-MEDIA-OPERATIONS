@@ -33,7 +33,7 @@ def main():
         discord_app.main()  # Ensure discord_app has a defined main() function
 
     elif app_selection == "Mastodon":
-        # WordPress operations
+        # Mastodon operations
         import mastodon_app
         st.subheader("Mastodon Manager")
         mastodon_app.main()  # Ensure mastodon_app has a defined main() function
