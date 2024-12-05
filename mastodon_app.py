@@ -5,7 +5,7 @@ from PIL import Image
 
 # Mastodon API credentials
 INSTANCE_URL = "https://mastodon.social"  # Replace with your Mastodon instance URL
-ACCESS_TOKEN = "your-access-token-here"  # Replace with your access token
+ACCESS_TOKEN = "UFkcYDkg3dSdmDq4ZQpFlF7ypLyhWpyrgpTMzCDY5Eg"  # Replace with your access token
 
 # Initialize the Mastodon client
 mastodon = Mastodon(
