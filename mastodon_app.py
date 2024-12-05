@@ -76,16 +76,7 @@ def main():
                 st.markdown("---")
         else:
             st.info("No toots available.")
-    
-    elif menu == "Delete":
-        st.subheader("Delete a Toot")
-        toots = read_toots()
-        toot_ids = [toot['id'] for toot in toots]
-        selected_toot = st.selectbox("Select a toot to delete", toot_ids)
-        if st.button("Delete Toot"):
-            delete_toot(selected_toot)
-            st.success(f"Toot with ID {selected_toot} deleted successfully!")
-    
+
     elif menu == "Update":
         st.subheader("Update a Toot (Delete & Repost)")
         toots = read_toots()
@@ -99,6 +90,17 @@ def main():
             else:
                 st.warning("New content must be provided.")
 
+    
+    elif menu == "Delete":
+        st.subheader("Delete a Toot")
+        toots = read_toots()
+        toot_ids = [toot['id'] for toot in toots]
+        selected_toot = st.selectbox("Select a toot to delete", toot_ids)
+        if st.button("Delete Toot"):
+            delete_toot(selected_toot)
+            st.success(f"Toot with ID {selected_toot} deleted successfully!")
+    
+    
 # Run the app
 if __name__ == "__main__":
     main()
