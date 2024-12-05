@@ -1,5 +1,7 @@
-from mastodon import Mastodon
+import os
 import streamlit as st
+from mastodon import Mastodon
+from PIL import Image
 
 # Mastodon API credentials
 INSTANCE_URL = "https://mastodon.social"  # Replace with your Mastodon instance URL
@@ -12,9 +14,15 @@ mastodon = Mastodon(
 )
 
 # CRUD Operations
-def create_toot(content):
+
+def create_toot(content, media=None):
     """Create a new toot (post)."""
-    toot = mastodon.status_post(content)
+    if media:
+        # Upload media (image/video)
+        media_id = mastodon.media_post(media, mime_type="image/jpeg" if media.filename.endswith('.jpg') else "video/mp4")
+        toot = mastodon.status_post(content, media_ids=[media_id])
+    else:
+        toot = mastodon.status_post(content)
     return toot
 
 def read_toots():
@@ -35,20 +43,28 @@ def delete_toot(toot_id):
 
 # Streamlit UI
 def main():
-    st.title("Mastodon CRUD Operations")
+    st.title("Mastodon CRUD Operations with Streamlit")
     
     # Sidebar menu
-    menu = st.sidebar.radio("Menu", ["Create", "Read", "Delete"])
+    menu = st.sidebar.radio("Menu", ["Create", "Read", "Delete", "Update"])
     
     if menu == "Create":
-        st.subheader("Create a New Toot")
+        st.subheader("Create a New Toot (Text/Image/Video)")
         content = st.text_area("Enter toot content")
+        media_type = st.selectbox("Select media type", ["None", "Image", "Video"])
+        
+        media = None
+        if media_type == "Image":
+            media = st.file_uploader("Upload an image", type=["jpg", "png", "jpeg"])
+        elif media_type == "Video":
+            media = st.file_uploader("Upload a video", type=["mp4", "mov"])
+        
         if st.button("Post Toot"):
-            if content:
-                toot = create_toot(content)
+            if content or media:
+                toot = create_toot(content, media)
                 st.success(f"Toot created successfully! ID: {toot['id']}")
             else:
-                st.warning("Content cannot be empty.")
+                st.warning("Content or media must be provided.")
     
     elif menu == "Read":
         st.subheader("Read Recent Toots")
@@ -69,6 +85,19 @@ def main():
         if st.button("Delete Toot"):
             delete_toot(selected_toot)
             st.success(f"Toot with ID {selected_toot} deleted successfully!")
+    
+    elif menu == "Update":
+        st.subheader("Update a Toot (Delete & Repost)")
+        toots = read_toots()
+        toot_ids = [toot['id'] for toot in toots]
+        selected_toot = st.selectbox("Select a toot to update", toot_ids)
+        new_content = st.text_area("Enter new content for the toot")
+        if st.button("Update Toot"):
+            if new_content:
+                updated_toot = update_toot(selected_toot, new_content)
+                st.success(f"Toot updated successfully! New Toot ID: {updated_toot['id']}")
+            else:
+                st.warning("New content must be provided.")
 
 # Run the app
 if __name__ == "__main__":
