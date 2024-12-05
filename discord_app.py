@@ -4,7 +4,7 @@ import streamlit as st
 import time
 
 # Replace with your bot's token and channel ID
-BOT_TOKEN = "MTMxMjQ2NjEwMzQ3NzIxMTE5Ng.GJ-xSZ.pJXwc7LWte90oyOegQyiiPbNiHEzC9vqPp3UiU"
+BOT_TOKEN = "MTMxMjQ2NjEwMzQ3NzIxMTE5Ng.GrOfEy.TveeoIxMbMfhACcr6bzH7eBtwd1FNw21eWDGW0"
 CHANNEL_ID = "1313061857157713963"
 BASE_URL = "https://discord.com/api/v10"
 
