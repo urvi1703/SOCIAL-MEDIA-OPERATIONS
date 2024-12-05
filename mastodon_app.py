@@ -46,7 +46,7 @@ def main():
     st.title("Mastodon CRUD Operations with Streamlit")
     
     # Sidebar menu
-    menu = st.sidebar.radio("Menu", ["Create", "Read", "Delete", "Update"])
+    menu = st.sidebar.radio("Menu", ["Create", "Read", "Update", "Delete"])
     
     if menu == "Create":
         st.subheader("Create a New Toot (Text/Image/Video)")
