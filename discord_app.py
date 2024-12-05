@@ -4,8 +4,8 @@ import streamlit as st
 import time
 
 # Replace with your bot's token and channel ID
-BOT_TOKEN = "<your_bot_token>"
-CHANNEL_ID = "<your_channel_id>"
+BOT_TOKEN = "MTMxMjQ2NjEwMzQ3NzIxMTE5Ng.GJ-xSZ.pJXwc7LWte90oyOegQyiiPbNiHEzC9vqPp3UiU"
+CHANNEL_ID = "1313061857157713963"
 BASE_URL = "https://discord.com/api/v10"
 
 # Headers for bot authentication
