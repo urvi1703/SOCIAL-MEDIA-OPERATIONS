@@ -1,4 +1,4 @@
 # SOCIAL-MEDIA-OPERATIONS
 
 Streamlit Link 
-https://social-media-operations-q9gmcsxlvekcscgtg4hhic.streamlit.app/
+https://social-media-operations-5ygseimqeinyeg4vs9sps7.streamlit.app/
