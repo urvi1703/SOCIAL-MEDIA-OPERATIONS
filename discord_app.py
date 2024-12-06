@@ -3,6 +3,9 @@ import requests
 import streamlit as st
 import os  # For accessing environment variables
 
+from dotenv import load_dotenv
+load_dotenv()
+
 # Fetch the bot token and channel ID from environment variables
 BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN")  # Set this in GitHub Secrets or deployment environment
 CHANNEL_ID = os.getenv("DISCORD_CHANNEL_ID")  # Optionally set this for flexibility
