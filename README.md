@@ -12,8 +12,5 @@ Reddit page
 Mastodon Page
 https://mastodon.social/@Biblophile
 
-Discord page
-
-
 Youtube Page (Private account)
 https://www.youtube.com/@urvashigangal3692
