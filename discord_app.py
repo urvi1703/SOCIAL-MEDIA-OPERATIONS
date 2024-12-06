@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 import requests
 import streamlit as st
-import time
+import os  # For accessing environment variables
 
-# Replace with your bot's token and channel ID
-BOT_TOKEN = "bot_token" #In GitHub Secret due to privacy issue
-CHANNEL_ID = "1313061857157713963"
+# Fetch the bot token and channel ID from environment variables
+BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN")  # Set this in GitHub Secrets or deployment environment
+CHANNEL_ID = os.getenv("DISCORD_CHANNEL_ID")  # Optionally set this for flexibility
 BASE_URL = "https://discord.com/api/v10"
 
 # Headers for bot authentication
@@ -92,4 +92,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-                
