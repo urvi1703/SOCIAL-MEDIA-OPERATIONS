@@ -77,6 +77,8 @@ uritemplate==4.1.1
 urllib3==2.2.3
 watchdog==6.0.0
 praw==7.7.0
+mastodon.py==1.8.0
+mimetypes==0.1.0
 
 # Libraries added for Discord functionality
 python-dotenv==1.0.1
