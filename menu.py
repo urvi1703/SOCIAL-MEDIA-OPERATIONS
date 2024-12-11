@@ -1,4 +1,5 @@
 import streamlit as st
+import asyncio  # Import asyncio
 
 # Main function to control the app flow
 def main():
