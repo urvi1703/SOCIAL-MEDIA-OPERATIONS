@@ -6,7 +6,7 @@ def main():
     st.title("Social Media CRUD Operations")
     
     # Add a selectbox for platform selection
-    app_selection = st.selectbox("Select a platform", ["Facebook", "YouTube", "Reddit","Mastodon"])
+    app_selection = st.selectbox("Select a platform", ["Facebook", "YouTube", "Reddit", "Mastodon", "Discord"])
     
     if app_selection == "Facebook":
         # Facebook operations
@@ -31,7 +31,14 @@ def main():
         import mastodon_app
         st.subheader("Mastodon Manager")
         mastodon_app.main()  # Ensure mastodon_app has a defined main() function
+    
+    elif app_selection == "Discord":
+        # Discord operations
+        import discord_app
+        st.subheader("Discord Operations")
+        discord_app.main()  # Ensure discord_app has a defined main() function
 
 # Run the main function when the script is executed
 if __name__ == "__main__":
     main()
+    
