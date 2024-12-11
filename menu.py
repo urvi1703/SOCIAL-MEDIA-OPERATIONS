@@ -33,10 +33,12 @@ def main():
         mastodon_app.main()  # Ensure mastodon_app has a defined main() function
     
     elif app_selection == "Discord":
-        # Discord operations
+    # Discord operations
         import run
         st.subheader("Discord Operations")
-        run.main()  # Ensure discord_app has a defined main() function
+    # Use asyncio.run to execute the coroutine
+        asyncio.run(run.main())
+
 
 # Run the main function when the script is executed
 if __name__ == "__main__":
