@@ -34,9 +34,9 @@ def main():
     
     elif app_selection == "Discord":
         # Discord operations
-        import discord_app
+        import run
         st.subheader("Discord Operations")
-        discord_app.main()  # Ensure discord_app has a defined main() function
+        run.main()  # Ensure discord_app has a defined main() function
 
 # Run the main function when the script is executed
 if __name__ == "__main__":
