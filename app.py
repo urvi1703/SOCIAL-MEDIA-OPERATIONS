@@ -9,7 +9,7 @@ from create_post import create_reddit_post
 reddit = praw.Reddit(
     client_id="bqwbGIUUup1mn3_Pt_cyiw",
     client_secret="GvMAb-9Y3arpcM34VsoybWJ6VqrTgQ",
-    user_agent="script:Content manager:v1.0 (by u/BigRaspberry2255)",
+    user_agent="script:Content manager:v1.0 (by /u/BigRaspberry2255)",
     username="BigRaspberry2255",
     password="Reddit1703"
 )
