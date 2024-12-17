@@ -2,11 +2,11 @@ import praw
 
 # Set up Reddit API client
 reddit = praw.Reddit(
-    client_id="K1rhO5hjcgWr86L0kW5pjQ",
-    client_secret="KVWREayY7U1_OFzkQlKz00AFW0rXQQ",
-    user_agent="script:crud:v1.0 (by u/Holiday-Box3743)",
-    username="Holiday-Box3743",
-    password="soumya2854"
+    client_id="bqwbGIUUup1mn3_Pt_cyiw",
+    client_secret="	GvMAb-9Y3arpcM34VsoybWJ6VqrTgQ",
+    user_agent="script:crud:v1.0 (by /u/BigRaspberry2255)",
+    username="BigRaspberry2255",
+    password="reddit17"
 )
 
 # Function to delete a Reddit post
