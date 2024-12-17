@@ -7,7 +7,7 @@ def main():
     st.title("Social Media CRUD Operations")
     
     # Add a selectbox for platform selection
-    app_selection = st.selectbox("Select a platform", ["Facebook", "YouTube", "Reddit", "Mastodon", "Discord"])
+    app_selection = st.selectbox("Select a platform", ["Facebook", "YouTube", "Reddit", "Mastodon"])
     
     if app_selection == "Facebook":
         # Facebook operations
@@ -33,12 +33,6 @@ def main():
         st.subheader("Mastodon Manager")
         mastodon_app.main()  # Ensure mastodon_app has a defined main() function
     
-    elif app_selection == "Discord":
-    # Discord operations
-        import run
-        st.subheader("Discord Operations")
-    # Use asyncio.run to execute the coroutine
-        asyncio.run(run.main())
 
 
 # Run the main function when the script is executed
