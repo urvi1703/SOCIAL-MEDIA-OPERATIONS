@@ -7,6 +7,7 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload
 import json
+from google.auth.transport.requests import Request
 
 # Constants
 CLIENT_SECRET_FILE = 'client_secret.json'
@@ -15,19 +16,32 @@ SCOPES = ['https://www.googleapis.com/auth/youtube']
 
 # Initialize YouTube API client
 def initialize_youtube():
-    creds = load_credentials()
+    creds = load_credentials()  # Load or refresh credentials
     youtube = build('youtube', 'v3', credentials=creds)
     return youtube
 
 # Load or get credentials with OAuth
 def load_credentials():
+    creds = None
+    # Check if token.json exists and load it
     if os.path.exists(TOKEN_FILE):
         creds = Credentials.from_authorized_user_file(TOKEN_FILE, SCOPES)
-    else:
+    if creds and creds.expired and creds.refresh_token:
+        try:
+            creds.refresh(Request())  # Attempt to refresh expired token
+            with open(TOKEN_FILE, 'w') as token:
+                token.write(creds.to_json())
+            print("Token refreshed successfully.")
+        except Exception as e:
+            print(f"Error refreshing token: {e}")
+            creds = None  # If refresh fails, we need to re-authenticate
+    if not creds or not creds.valid:
+        # If no valid token exists, start the OAuth flow
         flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRET_FILE, SCOPES)
         creds = flow.run_local_server(port=0)
         with open(TOKEN_FILE, 'w') as token:
             token.write(creds.to_json())
+        print("New credentials obtained.")
     return creds
 
 # Upload a video
