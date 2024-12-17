@@ -20,7 +20,6 @@ def initialize_youtube():
     print("YouTube API client initialized.")
     return youtube
 
-# Load or get credentials with OAuth
 def load_credentials():
     creds = None
     if os.path.exists(TOKEN_FILE):
@@ -33,10 +32,10 @@ def load_credentials():
 
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
-            print("Token expired. Refreshing...")
+            print("Token expired. Attempting to refresh...")
             try:
-                creds.refresh(Request())
-                print("Token refreshed successfully.")
+                creds.refresh(Request())  # Refresh the token using the refresh_token
+                print("Token refreshed successfully. New access token acquired.")
             except Exception as e:
                 print(f"Error refreshing token: {e}")
                 creds = None
@@ -54,6 +53,7 @@ def load_credentials():
                 token.write(creds.to_json())
             print("Credentials saved to token file.")
     return creds
+
 
 # Create (Upload) a video with YouTube API
 def upload_video(file_path, title, description):
